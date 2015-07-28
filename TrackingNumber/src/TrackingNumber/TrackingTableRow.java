@@ -1,5 +1,7 @@
 package TrackingNumber;
 
+import java.util.ArrayList;
+
 public class TrackingTableRow {
 	Range range;
 	char statusCode;
@@ -38,24 +40,26 @@ public class TrackingTableRow {
 
 	}
 
-	public TrackingTableRow processRow (TrackingTableRow old) {
+	public ArrayList<TrackingTableRow> processRow (TrackingTableRow old) {
 		if (this.range.classify(old.range) == Range.Relation.SAME) {
 			old.isDeleted = true;
 			return null;
 		} 
 		if (this.range.classify(old.range) == Range.Relation.SUBSET) {
-			return split();
+			return split(this, old);
 		}
 		if (this.range.classify(old.range) == Range.Relation.SUPERSET) {
 			old.isDeleted = true;
 			return null;
 		}
-		if (this.range.classify(old.range) == Range.Relation.L) {
-			
+		if (this.range.classify(old.range) == Range.Relation.LESSOVERLAP) {
+			return split(this, old);
 		}
-			
-		
+		if (this.range.classify(old.range) == Range.Relation.MOREOVERLAP) {
+			return split(this, old);
+		}
 		return null;
 	}
+}
 	
 
