@@ -7,6 +7,9 @@ public class TrackingTableRow {
 	char statusCode;
 	int trackingCode;
 	boolean isDeleted;
+	public String toString() {
+        return String.format(this.range.lo+" "+this.range.hi+" "+this.statusCode+" "+this.trackingCode);
+    }
 	
 	TrackingTableRow(int startRange, int endRange, int trackingCode, char statusCode) {
 		range = new Range(); 
