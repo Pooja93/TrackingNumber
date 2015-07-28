@@ -10,6 +10,33 @@ public class TrackingTableRow {
 		range = new Range(); 
 		isDeleted = false;
 	}
+	public ArrayList<TrackingTableRow> split(TrackingTableRow newRow, TrackingTableRow oldRow) {
+		int rangelowfirst, rangelowsecond;
+		int rangehighfirst, rangehighsecond;
+		ArrayList<TrackingTableRow> rows = new ArrayList<TrackingTableRow>();
+		if (newRow.range.lo < oldRow.range.lo) {
+			rangelowfirst = newRow.range.lo;
+			rangelowsecond = oldRow.range.lo;
+
+		} else {
+			rangelowfirst = oldRow.range.lo;
+			rangelowsecond = newRow.range.lo;
+		}
+		if (newRow.range.hi < oldRow.range.hi) {
+			rangehighfirst = newRow.range.hi;
+			rangehighsecond = oldRow.range.hi;
+		} else {
+			rangehighfirst = oldRow.range.hi;
+			rangehighsecond = newRow.range.hi;
+
+		}
+
+		rows.add(new TrackingTableRow(rangelowfirst, rangelowsecond - 1, oldRow.trackingCode, oldRow.statusCode));
+		rows.add(new TrackingTableRow(rangelowsecond, rangehighfirst - 1, newRow.trackingCode, newRow.statusCode));
+		rows.add(new TrackingTableRow(rangehighfirst, rangehighsecond, oldRow.trackingCode, oldRow.statusCode));
+		return rows;
+
+	}
 
 	public TrackingTableRow processRow (TrackingTableRow old) {
 		if (this.range.classify(old.range) == Range.Relation.SAME) {
@@ -31,35 +58,4 @@ public class TrackingTableRow {
 		return null;
 	}
 	
-public splitInterval(rowObject robj1, rowObject robj2){
-    int LOW;
-    int HIGH;
 
-    if(rObj1.low<rObj2.low){
-            LOW=robj1.low;
-            HIGH=robj1.high;
-        }
-    else if(rObj1.low>rObj2.low){
-            LOW=robj2.low;
-            HIGH=robj2.high;
-        }    
-             
-    updateTableRow(LOW,(rObj2.low)-1);
-    updateTableRow(rObj2.low,rObj2.high);
-    updateTableRow(rObj2.high+1,HIGH);
-        }
-        
-    if((rObj1.low<rObj2.low)&&(rObj2.low<rObj1.high)){   //more overlap
-            updateTableRow(rObj1.low,(rObj2.low)-1);
-            updateTableRow(rObj2.low,rObj1.high);
-            updateTableRow((rObj1.high)+1,rObj2.high);
-        }
-    else if((rObj2.low<rObj1.low)&&(rObj2.high<rObj1.high)){   //less overlap
-            updateTableRow(rObj2.low,(rObj1.high)-1);
-            updateTableRow(rObj1,high,rObj2.high);
-            updateTableRow(rObj2.high+1,rObj1.high);
-        }
-        
-    }
-    
-}
